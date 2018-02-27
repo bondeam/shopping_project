@@ -31,7 +31,7 @@ def LR(X, y):
     print("Residual sum of squares from cross validation is: %.2f"
           % np.mean((y_pred_cv - y) ** 2))
     # Explained variance score: 1 is perfect prediction
-    print('Variance score from one train: %.2f' % lr.score(X, y))
+    print('Variance score from cross validation: %.2f' % lr.score(X, y))
     
 if __name__ == '__main__':
     df = pd.read_csv('features.csv')
@@ -48,7 +48,18 @@ if __name__ == '__main__':
             return 0
         
     df['label'] = df['action'].apply(lambda x: label(x))
-    X = df[['kurtosis', 'maximum', 'mean', 'mean_diff', 'median', 'minimum', 'percentile_25', 'percentile_75', 'skewness', 'standard_dev', 'variance', 'count']].values
+    X = df[['kurtosis', 
+            'maximum', 
+            'mean', 
+            'mean_diff', 
+            'median', 
+            'minimum', 
+            'percentile_25', 
+            'percentile_75', 
+            'skewness', 
+            'standard_dev', 
+            'variance', 
+            'count']].values
     y = np.array(df['label'])
     
     LR(X, y)
