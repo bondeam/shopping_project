@@ -90,12 +90,25 @@ def window_data(chosen_data, window_size):
         windows.append(data[index:(index + window_size)])
         index += window_size
     return windows
+
+def window_dfdata(chosen_data, window_size):
+    # To be executed after get_pick_drop
+    # Arguments : Type of data (Pick,Drop,Noise) and Window size
+    # Returns : List of lists, each sublist being a data window of specified size
+    ind = 0
+    data = []
+    data = pd.concat(chosen_data)
+    windows = []
+    index = 0
+    while ((index+window_size)<len(data)):
+        windows.append(data[index:(index + window_size)])
+        index += window_size
+    return windows
     
 
-pick_data,drop_data,noise_data = get_pick_drop("data","butter")
+pick_data,drop_data,noise_data = get_pick_drop("../../data","butter")
 chosen_data = drop_data
-data = window_data(chosen_data,2000)
-print(len(data))
+data = window_dfdata(chosen_data,2000)
 
 data = data[5]
 data_range = range(0,len(data),1)
