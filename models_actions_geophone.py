@@ -122,7 +122,7 @@ def RF(X_train, X_test, y_train, y_test, eval_one = False, eval_cross = False, g
 def GB(X_train, X_test, y_train, y_test, eval_one = False, eval_cross = False, gridSearch = False):
     print('\n Gradient Boosting Tree')
 
-    gbdt = GradientBoostingClassifier(learning_rate=0.01,max_depth=2,min_samples_leaf=2,n_estimators=200)
+    gbdt = GradientBoostingClassifier()
     gbdt.fit(X, y)
     print(gbdt.feature_importances_)
     visFeatures(gbdt.feature_importances_)

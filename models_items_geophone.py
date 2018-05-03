@@ -197,9 +197,9 @@ if __name__ == '__main__':
             return 2
         else:
             return 3
-    print(len(df))
-    df = df[df['action'] == 'pickup']
-    print(len(df))
+        
+    print('drop')
+    df = df[df['action'] == 'drop']
     df['label'] = df['item'].apply(lambda x: label_item(x))
     
     print(df['item'].unique())
@@ -241,6 +241,6 @@ if __name__ == '__main__':
     
 #    LR(X_train, X_test, y_train, y_test, False, True, True)
 #    SVM(X_train, X_test, y_train, y_test, False, True, True)
-    RF(X_train, X_test, y_train, y_test, False, True, False)
-    GB(X_train, X_test, y_train, y_test, False, True, False)
+    RF(X_train, X_test, y_train, y_test, False, True, True)
+    GB(X_train, X_test, y_train, y_test, False, True, True)
     

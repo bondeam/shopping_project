@@ -100,7 +100,7 @@ def RF(X_train, X_test, y_train, y_test, eval_one = False, eval_cross = False, g
     rf = RandomForestClassifier(max_depth=2, random_state=0)
     rf.fit(X, y)
     print(rf.feature_importances_)
-    
+    visFeatures(rf.feature_importances_)
     if eval_one:
         evaluate_one_run(rf, X_test, y_test)
     
@@ -127,6 +127,8 @@ def GB(X_train, X_test, y_train, y_test, eval_one = False, eval_cross = False, g
     gbdt = GradientBoostingClassifier(max_depth=2, random_state=0)
     gbdt.fit(X, y)
     print(gbdt.feature_importances_)
+    visFeatures(gbdt.feature_importances_)
+    
     if eval_one:
         evaluate_one_run(gbdt, X_test, y_test)
     
@@ -147,6 +149,42 @@ def GB(X_train, X_test, y_train, y_test, eval_one = False, eval_cross = False, g
         y_pred_cv = cross_val_predict(gbdt, X, y, cv=10)
         evaluate_cross_validation(y, y_pred_cv)
 
+def visFeatures(importances):
+    from collections import OrderedDict
+    import matplotlib.pyplot as plt
+    
+    featureNames = ['kurtosis', 
+            'maximum', 
+            'mean', 
+            'mean_diff', 
+            'median', 
+            'minimum', 
+            'percentile_25', 
+            'percentile_75', 
+            'skewness', 
+            'standard_dev', 
+            'variance', 
+            'count',
+            'centroid',
+            'crest',
+            'fft_kurtosis',
+            'fft_mean',
+            'fft_skewness',
+            'fft_variance',
+            'flatness',
+            'rolloff',
+            'spread']
+    d = {}
+    for i in range(len(importances)):
+        if importances[i] > 0.01:
+            d[featureNames[i]] = importances[i]
+    
+    sorted_feature_importances = OrderedDict(sorted(d.items(), key=lambda x:x[1], reverse=True))
+    D = sorted_feature_importances
+    plt.figure()
+    plt.bar(range(len(D)), D.values(), align='center')
+    plt.xticks(range(len(D)), D.keys(),rotation=90)
+    
 if __name__ == '__main__':
     df = pd.read_csv('features_acce.csv')
 #    print(df.describe(), df.dtypes)
@@ -159,9 +197,9 @@ if __name__ == '__main__':
             return 2
         else:
             return 3
-    print(len(df))
+    
+    print('drop')
     df = df[df['action'] == 'drop']
-    print(len(df))
     df['label'] = df['item'].apply(lambda x: label_item(x))
     
     print(df['item'].unique())
@@ -201,7 +239,7 @@ if __name__ == '__main__':
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     
-    LR(X_train, X_test, y_train, y_test, False, True, True)
-    SVM(X_train, X_test, y_train, y_test, False, True, True)
+#    LR(X_train, X_test, y_train, y_test, False, True, True)
+#    SVM(X_train, X_test, y_train, y_test, False, True, True)
     RF(X_train, X_test, y_train, y_test, False, True, False)
     GB(X_train, X_test, y_train, y_test, False, True, False)
